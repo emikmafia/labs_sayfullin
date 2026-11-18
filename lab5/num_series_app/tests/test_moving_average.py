@@ -34,3 +34,10 @@ def test_exponential_moving_average():
 def test_exponential_moving_average_invalid_alpha():
     with pytest.raises(ValueError):
         exponential_moving_average([1.0, 2.0], 0.0)
+
+
+def test_simple_moving_average_deque():
+    from num_series.moving_average import simple_moving_average_deque
+    assert simple_moving_average_deque([1, 2, 3, 4, 5], 3) == [2.0, 3.0, 4.0]
+    with pytest.raises(ValueError):
+        simple_moving_average_deque([1, 2], 3)

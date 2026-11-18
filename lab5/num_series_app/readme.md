@@ -35,3 +35,13 @@ python main.py --kind trend --n 30 --export out.csv
 python -m pytest
 python run_self_tests.py
 ```
+
+### Замер производительности скользящей средней
+
+Для сравнения реализаций SMA через список и через `deque` используйте флаг `--benchmark`:
+
+```bash
+python main.py --kind random --n 5000 --window 20 --benchmark
+```
+
+Будут выведены средние времена выполнения (в секундах) для обеих реализаций.

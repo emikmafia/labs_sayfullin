@@ -30,6 +30,7 @@ from num_series import (
     random_series, sine_series, trend_series,
     summarize,
     simple_moving_average, centered_moving_average, exponential_moving_average,
+    benchmark_moving_average,
     save_series_json, load_series_auto,
 )
 
@@ -153,6 +154,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--alpha", type=float, default=0.3,
         help="коэффициент сглаживания для EMA, 0 < alpha <= 1",
     )
+    parser.add_argument(
+        "--benchmark",
+        action="store_true",
+        help="замерить время выполнения SMA для list и deque",
+    )
 
     return parser
 
@@ -208,6 +214,13 @@ def main(argv: Optional[List[str]] = None) -> int:
     print_series(f"EMA (alpha={args.alpha})", ema)
     if cma is not None:
         print_series(f"Центрированное MA (window={args.window})", cma)
+    if args.benchmark:
+        print("-" * 60)
+        print("Замер времени выполнения SMA (среднее за 1000 повторов):")
+        timings = benchmark_moving_average(data, args.window, repeats=1000)
+        print(f"  list : {timings['list']:.8f} с")
+        print(f"  deque: {timings['deque']:.8f} с")
+        print(f"  отношение (list/deque): {timings['list'] / timings['deque']:.2f}")
     print_footer()
     return 0
 
